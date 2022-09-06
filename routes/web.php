@@ -20,3 +20,7 @@ Route::get('/', function () {
 Route::get('/contact', function () {
     return 'contact page';
 })->name('home.contact');
+
+Route::get('/posts/{id}', function ($id) {
+    return 'post ' . $id;
+});
