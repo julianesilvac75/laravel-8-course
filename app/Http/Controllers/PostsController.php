@@ -38,11 +38,11 @@ class PostsController extends Controller
     {
         $validated = $request->validated();
 
-        $post = new BlogPost();
+        $post = BlogPost::create($validated);
 
-        $post->title = $validated['title'];
-        $post->content = $validated['content'];
-        $post->save();
+        // BlogPost::create();
+        // $post2 = BlogPost::make();
+        // $post2->save();
 
         $request->session()->flash('status', 'The blog post was created!');
 
