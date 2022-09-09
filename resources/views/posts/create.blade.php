@@ -5,6 +5,8 @@
 @section('content')
 
     <form action="{{ route('posts.store') }}" method="POST">
+        @csrf
+        
         <div>
             <input type="text" name="title">
         </div>
