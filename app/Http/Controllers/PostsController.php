@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class PostsController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resqource.
      *
      * @return \Illuminate\Http\ResponseO
      */
@@ -35,7 +35,13 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        $post = new BlogPost();
+
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        $post->save();
+
+        return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
     /**
