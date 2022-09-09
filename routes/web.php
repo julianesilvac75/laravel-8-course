@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,7 +44,10 @@ $posts = [
     ]
 ];
 
-Route::get('/posts', function () use ($posts) {
+Route::get('/posts', function (Request $request) use ($posts) {
+    // dd($request->all());
+    // dd((int)$request->input('page', 1));
+    dd((int)$request->query('page', 1));
     return view('posts.index', ['posts' => $posts]);
 });
 
@@ -57,26 +61,36 @@ Route::get('/posts/{id}', function ($id) use ($posts) {
 
 Route::get('/recent-posts/{days_ago?}', function ($daysAgo = 20) {
     return 'Posts from ' . $daysAgo . ' days ago.';
-})->name('posts.recent.index');
+})->name('posts.recent.index')->middleware('auth');
 
-Route::get('/fun/responses', function () use ($posts) {
-    return response($posts, 201)
-        ->header('Content-Type', 'application/json')
-        ->cookie('MY_COOKIE', 'Juliane', 3600);
-});
-
-Route::get('/fun/redirect', function () {
-    return redirect('/contact');
-});
-
-Route::get('/fun/back', function () {
-    return back();
-});
-
-Route::get('/fun/named-route', function () {
-    return redirect()->route('posts.show', ['id' => 1]);
-});
-
-Route::get('/fun/away', function () {
-    return redirect()->away('https://google.com');
+Route::prefix('/fun')->name('fun.')->group(function () use ($posts) {
+    Route::get('/responses', function () use ($posts) {
+        return response($posts, 201)
+            ->header('Content-Type', 'application/json')
+            ->cookie('MY_COOKIE', 'Juliane', 3600);
+    })->name('responses');
+    
+    Route::get('/redirect', function () {
+        return redirect('/contact');
+    })->name('redirect');
+    
+    Route::get('/back', function () {
+        return back();
+    })->name('back');
+    
+    Route::get('/named-route', function () {
+        return redirect()->route('posts.show', ['id' => 1]);
+    })->name('named-route');
+    
+    Route::get('/away', function () {
+        return redirect()->away('https://google.com');
+    })->name('away');
+    
+    Route::get('/json', function () use ($posts) {
+        return response()->json($posts);
+    })->name('json');
+    
+    Route::get('/download', function () use ($posts) {
+        return response()->download(public_path('/daniel.jpg'), 'face.jpg');
+    })->name('download');
 });
