@@ -1,23 +1,16 @@
 @extends('layouts.app')
 
-@section('title', $post['title'])
+@section('title', $post->title)
 
 @section('content')
 
-@if ($post['is_new'])
-    <div>a new post, using if</div>
-@else
-    <div>post is old, using elseif/else</div>
-@endif
+    <h1>{{ $post->title }}</h1>
+    <p>{{ $post->content }}</p>
 
-@unless ($post['is_new'])
-    <div>it's old, using unless</div>
-@endunless
+    <p>Added {{ $post->created_at->diffForHumans() }}</p>
 
-    <h1>{{ $post['title'] }}</h1>
-    <p>{{ $post['content'] }}</p>
+    @if(now()->diffInMinutes($post->created_at) < 5)
+        <div class="alert alert-info">New!</div>
+    @endif
 
-@isset($post['has_comments'])
-    <div>the post has comments, using isset</div>
-@endisset
 @endsection
