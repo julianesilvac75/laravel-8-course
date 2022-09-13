@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePost;
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PostsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->only(['create', 'store', 'edit', 'update', 'destroy']);
+    }
+
     /**
-     * Display a listing of the resqource.
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\ResponseO
      */
