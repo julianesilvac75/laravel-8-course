@@ -4,12 +4,9 @@
 
 @section('content')
 
-    <h1>{{ $post->title }}</h1>
-    <p>{{ $post->content }}</p>
+    <h1>
+        {{ $post->title }}
 
-    <p>Added {{ $post->created_at->diffForHumans() }}</p>
-
-    @if(now()->diffInMinutes($post->created_at) < 20)
         {{-- @component('components.badge', ['type' => 'primary'])
             Brand new!
         @endcomponent --}}
@@ -18,10 +15,15 @@
             Brand new!
         @endbadge --}}
 
-        <x-badge type="primary">
+        <x-badge show="{{ now()->diffInMinutes($post->created_at) < 30 }}">
             Brand new!
         </x-badge>
-    @endif
+
+    </h1>
+
+    <p>{{ $post->content }}</p>
+
+    <p>Added {{ $post->created_at->diffForHumans() }}</p>
 
     <h4>Comments</h4>
 
