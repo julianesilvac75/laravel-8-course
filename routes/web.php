@@ -17,12 +17,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, 'home'])->name('home.index')
-    // ->middleware('auth')
-    ;
+Route::get('/', [HomeController::class, 'home'])->name('home.index');
 Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact');
+Route::get('/secret', [HomeController::class, 'secret'])->name('home.secret')->middleware('can:home.secret');
 
-Route::get('single', AboutController::class);
+Route::get('/single', AboutController::class);
 
 Route::resource('posts', PostsController::class);
 
