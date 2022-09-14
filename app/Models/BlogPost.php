@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\DeletedAdminScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,6 +38,10 @@ class BlogPost extends Model
 
     static function boot()
     {
+        // since SoftDeletes trait already uses a global scopes that prevents users to see deleted posts,
+        // the DeletedAdminScope has to come before the parent::boot()
+        static::addGlobalScope(new DeletedAdminScope);
+
         parent::boot();
         
         // delete event for tables with foreign keys
