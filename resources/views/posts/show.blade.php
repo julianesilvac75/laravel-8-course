@@ -7,14 +7,6 @@
     <h1>
         {{ $post->title }}
 
-        {{-- @component('components.badge', ['type' => 'primary'])
-            Brand new!
-        @endcomponent --}}
-
-        {{-- @badge(['type' => 'primary'])
-            Brand new!
-        @endbadge --}}
-
         <x-badge show="{{ now()->diffInMinutes($post->created_at) < 30 }}">
             Brand new!
         </x-badge>
@@ -23,7 +15,10 @@
 
     <p>{{ $post->content }}</p>
 
-    <p>Added {{ $post->created_at->diffForHumans() }}</p>
+    <x-updated :date="$post->created_at" :name="$post->user->name" />
+    <x-updated :date="$post->updated_at">
+        Updated
+    </x-updated>
 
     <h4>Comments</h4>
 
@@ -31,9 +26,8 @@
         <p>
             {{ $comment->content }}
         </p>
-        <p class="text-muted">
-            Added {{ $comment->created_at->diffForHumans() }}
-        </p>
+       
+        <x-updated :date="$comment->created_at" />
     @empty
         <p>No comments yet!</p>
     @endforelse
