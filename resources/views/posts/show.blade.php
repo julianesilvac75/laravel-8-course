@@ -10,9 +10,17 @@
     <p>Added {{ $post->created_at->diffForHumans() }}</p>
 
     @if(now()->diffInMinutes($post->created_at) < 20)
-        @component('posts.badge', ['type' => 'primary'])
+        {{-- @component('components.badge', ['type' => 'primary'])
             Brand new!
-        @endcomponent
+        @endcomponent --}}
+
+        {{-- @badge(['type' => 'primary'])
+            Brand new!
+        @endbadge --}}
+
+        <x-badge type="primary">
+            Brand new!
+        </x-badge>
     @endif
 
     <h4>Comments</h4>
