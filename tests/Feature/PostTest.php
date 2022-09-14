@@ -55,7 +55,8 @@ class PostTest extends TestCase
             'content' => 'This is a valid content'
         ];
 
-        $this->post('/posts', $params)
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
         
@@ -69,7 +70,8 @@ class PostTest extends TestCase
             'content' => 'x',
         ];
 
-        $this->post('/posts', $params)
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('errors');
 
@@ -90,7 +92,8 @@ class PostTest extends TestCase
             'content' => 'This is the modified content',
         ];
 
-        $this->put("/posts/{$post->id}", $params)
+        $this->actingAs($this->user())
+            ->put("/posts/{$post->id}", $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
 
@@ -102,25 +105,27 @@ class PostTest extends TestCase
 
     public function test_delete()
     {
-        $post = $this->createDummyBlogPost();
-
-        $this->assertDatabaseHas('blog_posts', $post->getAttributes());
-
-        $this->delete("/posts/{$post->id}")
-            ->assertStatus(302)
-            ->assertSessionHas('status');
-
-        $this->assertEquals(session('status'), 'The blog post was deleted!');
-        $this->assertDatabaseMissing('blog_posts', $post->getAttributes());
-    }
-
-    private function createDummyBlogPost(): BlogPost
-    {
         // $post = new BlogPost();
         // $post->title = 'New title';
         // $post->content = 'This is the content';
         // $post->save();
 
+        $post = $this->createDummyBlogPost();
+
+        $this->assertDatabaseHas('blog_posts', $post->getAttributes());
+
+        $this->actingAs($this->user())
+            ->delete("/posts/{$post->id}")
+            ->assertStatus(302)
+            ->assertSessionHas('status');
+
+        $this->assertEquals(session('status'), 'The blog post was deleted!');
+        // $this->assertDatabaseMissing('blog_posts', $post->getAttributes());
+        $this->assertSoftDeleted('blog_posts', $post->getAttributes());
+    }
+
+    private function createDummyBlogPost(): BlogPost
+    {
         return BlogPost::factory()->newPost()->create();
     }
 }
