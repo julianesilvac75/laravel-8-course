@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Scopes\LatestScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -17,7 +18,7 @@ class BlogPost extends Model
 
     public function comments()
     {
-        return $this->hasMany('App\Models\Comment');
+        return $this->hasMany('App\Models\Comment')->latest();
     }
 
     public function user()
@@ -25,12 +26,17 @@ class BlogPost extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+    public function scopeLatest(Builder $query)
+    {
+        return $query->orderBy(static::CREATED_AT, 'desc');
+    }
+
     static function boot()
     {
         parent::boot();
         
         //global scope to order posts and comments by the newest
-        static::addGlobalScope(new LatestScope);
+        // static::addGlobalScope(new LatestScope);
         
         // delete event for tables with foreign keys
         static::deleting(function (BlogPost $blogPost) {
