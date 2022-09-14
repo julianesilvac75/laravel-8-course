@@ -31,12 +31,14 @@ class BlogPost extends Model
         return $query->orderBy(static::CREATED_AT, 'desc');
     }
 
+    public function scopeMostCommented(Builder $query)
+    {
+        return $query->withCount('comments')->orderBy('comments_count', 'desc');
+    }
+
     static function boot()
     {
         parent::boot();
-        
-        //global scope to order posts and comments by the newest
-        // static::addGlobalScope(new LatestScope);
         
         // delete event for tables with foreign keys
         static::deleting(function (BlogPost $blogPost) {
