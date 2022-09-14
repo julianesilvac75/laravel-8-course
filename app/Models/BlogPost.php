@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -24,11 +25,14 @@ class BlogPost extends Model
         return $this->belongsTo('App\Models\User');
     }
 
-    // delete event for tables with foreign keys
     static function boot()
     {
         parent::boot();
-
+        
+        //global scope to order posts and comments by the newest
+        static::addGlobalScope(new LatestScope);
+        
+        // delete event for tables with foreign keys
         static::deleting(function (BlogPost $blogPost) {
             $blogPost->comments()->delete();
         });
