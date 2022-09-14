@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePost;
 use App\Models\BlogPost;
-// use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -26,6 +26,7 @@ class PostsController extends Controller
             [
                 'posts' => BlogPost::latest()->withCount('comments')->get(),
                 'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
+                'mostActive' => User::withMostBlogPosts()->take(5)->get(),
             ]);
     }
 

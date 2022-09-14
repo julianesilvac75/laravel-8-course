@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,7 +32,7 @@ class BlogPost extends Model
 
     public function scopeMostCommented(Builder $query)
     {
-        return $query->withCount('comments')->orderBy('comments_count', 'desc');
+        return $query->withCount('comments')->orderBy('comments_count', );
     }
 
     static function boot()

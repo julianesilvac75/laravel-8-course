@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -34,6 +35,11 @@ class User extends Authenticatable
     public function blogPosts()
     {
         return $this->hasMany('App\Models\BlogPost');
+    }
+
+    public function scopeWithMostBlogPosts(Builder $query)
+    {
+        return $query->withCount('blogPosts')->orderBy('blog_posts_count', 'desc');
     }
 
     /**
