@@ -48,6 +48,7 @@ class User extends Authenticatable
             $query->whereBetween(static::CREATED_AT, [now()->subMonths(1), now()]);
         }])
             ->having('blog_posts_count', '>=', 2)
+            // ->has('blogPosts', '>=', 2) // recomended by the course but not working, 'having' doesn't seem to be a problem anymore
             ->orderBy('blog_posts_count', 'desc');
     }
 
