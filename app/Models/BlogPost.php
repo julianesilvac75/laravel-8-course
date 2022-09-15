@@ -33,7 +33,7 @@ class BlogPost extends Model
 
     public function scopeMostCommented(Builder $query)
     {
-        return $query->withCount('comments')->orderBy('comments_count', );
+        return $query->withCount('comments')->orderBy('comments_count', 'desc');
     }
 
     static function boot()
