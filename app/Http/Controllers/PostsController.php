@@ -84,9 +84,14 @@ class PostsController extends Controller
             return BlogPost::with('comments')->findOrFail($id);
         });
 
+        $counter = 0;
+
         return view(
             'posts.show',
-            ['post' => $post]);
+            [
+                'post' => $post,
+                'counter' => $counter,
+            ]);
     }
 
     /**
