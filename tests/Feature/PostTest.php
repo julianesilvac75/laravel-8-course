@@ -83,7 +83,8 @@ class PostTest extends TestCase
 
     public function test_update_valid()
     {
-        $post = $this->createDummyBlogPost();
+        $user = $this->user();
+        $post = $this->createDummyBlogPost($user->id);
 
         $this->assertDatabaseHas('blog_posts', $post->getAttributes());
 
@@ -92,7 +93,7 @@ class PostTest extends TestCase
             'content' => 'This is the modified content',
         ];
 
-        $this->actingAs($this->user())
+        $this->actingAs($user)
             ->put("/posts/{$post->id}", $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
@@ -105,27 +106,24 @@ class PostTest extends TestCase
 
     public function test_delete()
     {
-        // $post = new BlogPost();
-        // $post->title = 'New title';
-        // $post->content = 'This is the content';
-        // $post->save();
-
-        $post = $this->createDummyBlogPost();
+        $user = $this->user();
+        $post = $this->createDummyBlogPost($user->id);
 
         $this->assertDatabaseHas('blog_posts', $post->getAttributes());
 
-        $this->actingAs($this->user())
+        $this->actingAs($user)
             ->delete("/posts/{$post->id}")
             ->assertStatus(302)
             ->assertSessionHas('status');
 
         $this->assertEquals(session('status'), 'The blog post was deleted!');
-        // $this->assertDatabaseMissing('blog_posts', $post->getAttributes());
         $this->assertSoftDeleted('blog_posts', $post->getAttributes());
     }
 
-    private function createDummyBlogPost(): BlogPost
+    private function createDummyBlogPost($userId = null): BlogPost
     {
-        return BlogPost::factory()->newPost()->create();
+        return BlogPost::factory()->newPost()->create([
+            'user_id' => $userId ?? $this->user()->id,
+        ]);
     }
 }

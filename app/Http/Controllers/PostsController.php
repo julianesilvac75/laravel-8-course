@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePost;
 use App\Models\BlogPost;
-use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -23,7 +23,12 @@ class PostsController extends Controller
     {
         return view(
             'posts.index',
-            ['posts' => BlogPost::withCount('comments')->get()]);
+            [
+                'posts' => BlogPost::latest()->withCount('comments')->get(),
+                'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
+                'mostActive' => User::withMostBlogPosts()->take(5)->get(),
+                'mostActiveLastMonth' => User::withMostBlogPostsLastMonth()->take(5)->get(),
+            ]);
     }
 
     /**
@@ -45,6 +50,7 @@ class PostsController extends Controller
     public function store(StorePost $request)
     {
         $validated = $request->validated();
+        $validated['user_id'] = $request->user()->id;
 
         $post = BlogPost::create($validated);
 
@@ -61,6 +67,12 @@ class PostsController extends Controller
      */
     public function show($id)
     {
+        // return view(
+        //     'posts.show',
+        //     ['post' => BlogPost::with(['comments' => function ($query) {
+        //         return $query->latest();
+        //     }])->findOrFail($id)]);
+
         return view(
             'posts.show',
             ['post' => BlogPost::with('comments')->findOrFail($id)]);
@@ -76,7 +88,7 @@ class PostsController extends Controller
     {
         $post = BlogPost::findOrFail($id);
 
-        $this->authorize('update-post', $post);
+        $this->authorize($post);
 
         return view('posts.edit', ['post' => $post]);
     }
@@ -92,7 +104,7 @@ class PostsController extends Controller
     {
         $post = BlogPost::findOrFail($id);
 
-        $this->authorize('update-post', $post);
+        $this->authorize($post);
 
         $validated = $request->validated();
         $post->fill($validated);
@@ -113,7 +125,7 @@ class PostsController extends Controller
     {
         $post = BlogPost::findOrFail($id);
 
-        $this->authorize('delete-post', $post);
+        $this->authorize($post);
 
         $post->delete();
 

@@ -16,6 +16,7 @@ class BlogPostFactory extends Factory
         return [
             'title' => $this->faker->sentence(10),
             'content' => $this->faker->paragraphs(5, true),
+            'created_at' => $this->faker->dateTimeBetween('-3 months'),
         ];
     }
 
@@ -24,7 +25,6 @@ class BlogPostFactory extends Factory
         return $this->state(function () {
             return [
                 'title' => 'New title',
-                // 'content' => 'This is the content'
             ];
         });
     }
