@@ -32,7 +32,7 @@
                     {{ $comment->content }}
                 </p>
             
-                <x-updated :date="$comment->created_at" />
+                <x-updated :date="$comment->created_at" :name="$comment->user->name"/>
             @empty
                 <p>No comments yet!</p>
             @endforelse

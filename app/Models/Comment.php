@@ -19,6 +19,11 @@ class Comment extends Model
         return $this->belongsTo('App\Models\BlogPost');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
     public function scopeLatest(Builder $query)
     {
         return $query->orderBy(static::CREATED_AT, 'desc');
@@ -27,8 +32,5 @@ class Comment extends Model
     static function boot()
     {
         parent::boot();
-        
-        //global scope to order comments by the newest
-        // static::addGlobalScope(new LatestScope);
     }
 }
