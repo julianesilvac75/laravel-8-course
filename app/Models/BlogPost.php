@@ -42,6 +42,13 @@ class BlogPost extends Model
         return $query->withCount('comments')->orderBy('comments_count', 'desc');
     }
 
+    public function scopeLatestWithRelations(Builder $query)
+    {
+        return $query->latest()->withCount('comments')
+            ->with('user')
+            ->with('tags');
+    }
+
     static function boot()
     {
         // since SoftDeletes trait already uses a global scopes that prevents users to see deleted posts,
