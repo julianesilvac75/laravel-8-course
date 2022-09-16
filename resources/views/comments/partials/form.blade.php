@@ -1,6 +1,6 @@
 <div class="mb-2 mt-2">
     @auth
-        <form action="#" method="POST">
+        <form action="{{ route('posts.comments.store', ['post' =>$post->id]) }}" method="POST">
             @csrf
     
             <div class="form-group">
@@ -11,6 +11,8 @@
                 <input class="btn btn-primary btn-block" type="submit" value="Add Comment">
             </div>
         </form>
+
+        <x-errors />
     
     @else
         <p>
