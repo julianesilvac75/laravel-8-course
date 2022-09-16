@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePost;
 use App\Models\BlogPost;
-use App\Models\User;
+use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
@@ -53,25 +52,12 @@ class PostsController extends Controller
 
         $post = BlogPost::create($validated);
 
-        $hasFile = $request->hasFile('thumbnail');
-        dump($hasFile);
-        
-        if ($hasFile) {
-            $file = $request->file('thumbnail');
-            dump($file);
-            dump($file->getClientMimeType());
-            dump($file->getClientOriginalExtension());
-
-            dump($file->store('thumbnails'));
-            dump(Storage::disk('public')->put('thumbnails', $file));
-
-            $name1 = $file->storeAs('thumbnails', "{$post->id}.{$file->guessExtension()}");
-            $name2 = Storage::disk('local')->putFileAs('thumbnails', $file, "{$post->id}.{$file->guessExtension()}");
-
-            dump(Storage::url($name1));
-            dump(Storage::disk('local')->url($name2));
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails');
+            $post->image()->save(
+                Image::create(['path' => $path])
+            );
         }
-        die;
 
         $request->session()->flash('status', 'The blog post was created!');
 
