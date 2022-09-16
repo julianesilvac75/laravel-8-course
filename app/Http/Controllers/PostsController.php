@@ -7,6 +7,7 @@ use App\Models\BlogPost;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
@@ -62,6 +63,10 @@ class PostsController extends Controller
             dump($file->getClientOriginalExtension());
 
             dump($file->store('thumbnails'));
+            dump(Storage::disk('public')->put('thumbnails', $file));
+
+            dump($file->storeAs('thumbnails', "{$post->id}.{$file->guessExtension()}"));
+            dump(Storage::disk('local')->putFileAs('thumbnails', $file, "{$post->id}.{$file->guessExtension()}"));
         }
         die;
 
