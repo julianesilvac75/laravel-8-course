@@ -14,7 +14,7 @@
 
                 {{ $post->title }}
                 
-                <x-badge show="{{ now()->diffInMinutes($post->created_at) < 30 }}">
+                <x-badge show="{{ now()->diffInMinutes($post->created_at) < 5 }}">
                     Brand new!
                 </x-badge>
 
@@ -27,8 +27,6 @@
             @endif
             
             <p>{{ $post->content }}</p>
-
-            {{-- <img src="{{ $post->image->url() }}" alt="Thumbnail"> --}}
 
             <x-updated :date="$post->created_at" :name="$post->user->name" />
             <x-updated :date="$post->updated_at">
