@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class Comment extends Model
 {
@@ -14,9 +15,16 @@ class Comment extends Model
 
     use SoftDeletes;
 
+    protected $fillable = ['user_id', 'content'];
+
     public function blogPost()
     {
         return $this->belongsTo('App\Models\BlogPost');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
     }
 
     public function scopeLatest(Builder $query)
@@ -27,8 +35,10 @@ class Comment extends Model
     static function boot()
     {
         parent::boot();
-        
-        //global scope to order comments by the newest
-        // static::addGlobalScope(new LatestScope);
+
+        static::creating(function (Comment $comment) {
+            Cache::tags(['blog-post'])->forget("blog-post-{$comment->blog_post_id}");
+            Cache::tags(['blog-post'])->forget('blog-post-commented');
+        });
     }
 }

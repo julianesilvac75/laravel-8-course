@@ -7,14 +7,16 @@
         <div class="col-8">
             <h1>
                 {{ $post->title }}
-
+                
                 <x-badge show="{{ now()->diffInMinutes($post->created_at) < 30 }}">
                     Brand new!
                 </x-badge>
-
+                
             </h1>
-
+            
             <p>{{ $post->content }}</p>
+
+            <img src="{{ $post->image->url() }}" alt="Thumbnail">
 
             <x-updated :date="$post->created_at" :name="$post->user->name" />
             <x-updated :date="$post->updated_at">
@@ -27,12 +29,15 @@
 
             <h4>Comments</h4>
 
+            @include('comments.partials.form')
+
             @forelse ($post->comments as $comment)
                 <p>
                     {{ $comment->content }}
                 </p>
+
             
-                <x-updated :date="$comment->created_at" />
+                <x-updated :date="$comment->created_at" :name="$comment->user->name"/>
             @empty
                 <p>No comments yet!</p>
             @endforelse

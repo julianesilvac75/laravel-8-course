@@ -32,6 +32,11 @@ class BlogPost extends Model
         return $this->belongsToMany('App\Models\Tag')->withTimestamps();
     }
 
+    public function image()
+    {
+        return $this->hasOne('App\Models\Image');
+    }
+
     public function scopeLatest(Builder $query)
     {
         return $query->orderBy(static::CREATED_AT, 'desc');
@@ -40,6 +45,13 @@ class BlogPost extends Model
     public function scopeMostCommented(Builder $query)
     {
         return $query->withCount('comments')->orderBy('comments_count', 'desc');
+    }
+
+    public function scopeLatestWithRelations(Builder $query)
+    {
+        return $query->latest()->withCount('comments')
+            ->with('user')
+            ->with('tags');
     }
 
     static function boot()
@@ -53,11 +65,12 @@ class BlogPost extends Model
         // delete event for tables with foreign keys
         static::deleting(function (BlogPost $blogPost) {
             $blogPost->comments()->delete();
+            Cache::tags(['blog-post'])->forget("blog-post-{$blogPost->id}");
         });
 
         // check if there was any changes on the cached content of the blog post
         static::updating(function (BlogPost $blogPost) {
-            Cache::forget("blog-post-{$blogPost->id}");
+            Cache::tags(['blog-post'])->forget("blog-post-{$blogPost->id}");
         });
 
         static::restoring(function (BlogPost $blogPost) {
