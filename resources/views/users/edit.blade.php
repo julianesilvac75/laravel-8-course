@@ -11,7 +11,7 @@
 
         <div class="row">
             <div class="col-4">
-                <img src="" alt="thumbnail" class="img-thumbnail avatar">
+                <img src="{{ $user->image ? $user->image->url() : '' }}" alt="thumbnail" class="img-thumbnail avatar">
 
                 <div class="card mt-4">
                     <div class="card-body">
@@ -26,6 +26,8 @@
                     <label for="name">Name:</label>
                     <input type="form-control" value="" type="text" id="name" name="name">
                 </div>
+
+                <x-errors></x-errors>
 
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary" value="Save Changes">

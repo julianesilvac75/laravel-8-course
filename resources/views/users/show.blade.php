@@ -4,7 +4,7 @@
 
     <div class="row">
         <div class="col-4">
-            <img src="" alt="thumbnail" class="img-thumbnail avatar">
+            <img src="{{ $user->image ? $user->image->url() : '' }}" alt="thumbnail" class="img-thumbnail avatar">
         </div>
 
         <div class="col-8">
