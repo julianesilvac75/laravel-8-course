@@ -28,7 +28,7 @@
             
             <p>{{ $post->content }}</p>
 
-            <x-updated :date="$post->created_at" :name="$post->user->name" />
+            <x-updated :date="$post->created_at" :name="$post->user->name" :userId="$post->user->id" />
             <x-updated :date="$post->updated_at">
                 Updated
             </x-updated>
@@ -39,18 +39,10 @@
 
             <h4>Comments</h4>
 
-            @include('comments.partials.form')
+            <x-commentForm :route="route('posts.comments.store', ['post' => $post->id])"></x-commentForm>
 
-            @forelse ($post->comments as $comment)
-                <p>
-                    {{ $comment->content }}
-                </p>
+            <x-commentList :comments="$post->comments"></x-commentList>
 
-            
-                <x-updated :date="$comment->created_at" :name="$comment->user->name"/>
-            @empty
-                <p>No comments yet!</p>
-            @endforelse
         </div>
         <div class="col-4">
             @include('posts.partials.activity')
