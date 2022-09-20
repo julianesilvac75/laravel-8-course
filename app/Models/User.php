@@ -63,8 +63,15 @@ class User extends Authenticatable
             $query->whereBetween(static::CREATED_AT, [now()->subMonths(1), now()]);
         }])
             ->having('blog_posts_count', '>=', 2)
-            // ->has('blogPosts', '>=', 2) // recomended by the course but not working, 'having' doesn't seem to be a problem anymore
             ->orderBy('blog_posts_count', 'desc');
+    }
+
+    public function scopeThatHasCommentedOnPost (Builder $query, BlogPost $post)
+    {
+        return $query->whereHas('comments', function ($query) use ($post) {
+            return $query->where('commentable_id', '=', $post->id)
+                ->where('commentable_type', '=', BlogPost::class);
+        });
     }
 
     /**
