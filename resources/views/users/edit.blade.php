@@ -15,7 +15,7 @@
 
                 <div class="card mt-4">
                     <div class="card-body">
-                        <h6>Upload a different photo</h6>
+                        <h6>{{ __('Upload a different photo') }}</h6>
                         <input type="file" name="avatar" class="form-control-file">
                     </div>
                 </div>
@@ -23,14 +23,14 @@
 
             <div class="col-8">
                 <div class="form-group">
-                    <label for="name">Name:</label>
+                    <label for="name">{{ __('Name:') }}</label>
                     <input type="form-control" value="" type="text" id="name" name="name">
                 </div>
 
                 <x-errors></x-errors>
 
                 <div class="form-group">
-                    <input type="submit" class="btn btn-primary" value="Save Changes">
+                    <input type="submit" class="btn btn-primary" value="{{ __('Save changes') }}">
                 </div>
             </div>
         </div>

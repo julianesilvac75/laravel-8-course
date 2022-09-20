@@ -11,7 +11,7 @@
         @include('posts.partials.form')
 
         <div>
-            <input class="btn btn-primary btn-block" type="submit" value="Update">
+            <input class="btn btn-primary btn-block" type="submit" value="{{ __('Update!') }}">
         </div>
     </form>
 

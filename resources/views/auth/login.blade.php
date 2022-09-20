@@ -5,7 +5,7 @@
         @csrf
 
         <div class="form-group">
-            <label for="email">E-mail</label>
+            <label for="email">{{ __('E-mail') }}</label>
             <input type="text" name="email" value="{{ old('email') }}"
                 required class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email"
             >
@@ -18,7 +18,7 @@
         </div>
 
         <div class="form-group">
-            <label for="password">Password</label>
+            <label for="password">{{ __('Password') }}</label>
             <input type="password" name="password"
                 required class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="password"
             >
@@ -35,10 +35,10 @@
                 <input class="form-check-input" type="checkbox" name="remember"
                     id="remember" {{ old('remember') ? 'checked' : '' }}
                 >
-                <label class="form-check-label" for="remember">Remember Me</label>
+                <label class="form-check-label" for="remember">{{ __('Remember me') }}</label>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <button type="submit" class="btn btn-primary btn-block">{{ __('Login!') }}</button>
     </form>
 @endsection
