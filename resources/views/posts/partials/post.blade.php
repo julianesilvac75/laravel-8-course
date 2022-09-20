@@ -18,11 +18,7 @@
 
     <x-tags :tags="$post->tags" />
     
-    @if ($post->comments_count)
-        <p>{{ $post->comments_count }} comments</p>
-    @else
-        <p>No comments yet!</p>
-    @endif
+    {{ trans_choice('messages.comments', $post->comments_count) }}
     
     <div class="mb-3">
         {{-- Apparently, @auth is not necessary anymore on Laravel 8  --}}
