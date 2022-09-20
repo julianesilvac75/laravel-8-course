@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Scopes\DeletedAdminScope;
+use App\Traits\Taggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,13 +14,13 @@ class BlogPost extends Model
 {
     use HasFactory;
 
-    use SoftDeletes;
+    use SoftDeletes, Taggable;
     
     protected $fillable = ['title', 'content', 'user_id'];
 
     public function comments()
     {
-        return $this->hasMany('App\Models\Comment')->latest();
+        return $this->morphMany('App\Models\Comment', 'commentable')->latest();
     }
 
     public function user()
@@ -27,14 +28,9 @@ class BlogPost extends Model
         return $this->belongsTo('App\Models\User');
     }
 
-    public function tags()
-    {
-        return $this->belongsToMany('App\Models\Tag')->withTimestamps();
-    }
-
     public function image()
     {
-        return $this->hasOne('App\Models\Image');
+        return $this->morphOne('App\Models\Image', 'imageable');
     }
 
     public function scopeLatest(Builder $query)

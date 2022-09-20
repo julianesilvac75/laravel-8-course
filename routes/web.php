@@ -5,6 +5,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\PostTagController;
+use App\Http\Controllers\UserCommentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -28,5 +30,8 @@ Route::get('/single', AboutController::class);
 Route::resource('posts', PostsController::class);
 Route::get('/posts/tag/{tag}', [PostTagController::class, 'index'])->name('posts.tags.index');
 Route::resource('posts.comments', PostCommentController::class)->only(['store']);
+
+Route::resource('users', UserController::class)->only(['show', 'edit', 'update']);
+Route::resource('users.comments', UserCommentController::class)->only(['store']);
 
 Auth::routes();
