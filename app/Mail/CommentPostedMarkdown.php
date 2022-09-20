@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+// use App\Models\BlogPost;
 use App\Models\Comment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,6 +32,7 @@ class CommentPostedMarkdown extends Mailable
      */
     public function build()
     {
+        // $post = new BlogPost();
         $subject = "Someone commented on your '{$this->comment->commentable->title}' blog post!";
 
         return $this
