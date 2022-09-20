@@ -23,16 +23,12 @@ class PostCommentController extends Controller
             'user_id' => $request->user()->id,
         ]);
 
-        // Mail::to($post->user)->queue(
-        //     new CommentPostedMarkdown($comment)
-        // );
-
         ThrottledMail::dispatch(
             new CommentPostedMarkdown($comment),
             $post->user
-        );
+        )->onQueue('low');
 
-        NotifyUsersPostWasCommented::dispatch($comment);
+        NotifyUsersPostWasCommented::dispatch($comment)->onQueue('high');
 
         return redirect()
             ->back()
