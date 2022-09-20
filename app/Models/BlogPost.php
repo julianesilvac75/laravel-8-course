@@ -57,20 +57,5 @@ class BlogPost extends Model
         static::addGlobalScope(new DeletedAdminScope);
 
         parent::boot();
-        
-        // delete event for tables with foreign keys
-        static::deleting(function (BlogPost $blogPost) {
-            $blogPost->comments()->delete();
-            Cache::tags(['blog-post'])->forget("blog-post-{$blogPost->id}");
-        });
-
-        // check if there was any changes on the cached content of the blog post
-        static::updating(function (BlogPost $blogPost) {
-            Cache::tags(['blog-post'])->forget("blog-post-{$blogPost->id}");
-        });
-
-        static::restoring(function (BlogPost $blogPost) {
-            $blogPost->comments()->restore();
-        });
     }
 }
