@@ -9,8 +9,6 @@ use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-use function PHPSTORM_META\map;
-
 class NotifyAdminWhenBlogPostCreated
 {
     /**
