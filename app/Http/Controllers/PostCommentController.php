@@ -25,12 +25,6 @@ class PostCommentController extends Controller
 
         event(new CommentPosted($comment));
 
-        // ThrottledMail::dispatch(new CommentPostedMarkdown($comment), $post->user)
-        //     ->onQueue('low');
-
-        // NotifyUsersPostWasCommented::dispatch($comment)
-        //     ->onQueue('high');
-
         return redirect()
             ->back()
             ->withStatus('The comment was created!');
