@@ -35,7 +35,6 @@ class CommentPosted extends Mailable
 
         return $this
             ->subject($subject)
-            // ->from('admin@laravel.test', 'Admin')
             ->view('emails.posts.commented');
     }
 }
