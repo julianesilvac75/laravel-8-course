@@ -80,7 +80,7 @@ class PostsController extends Controller
             return BlogPost::with('comments', 'tags', 'user', 'comments.user')->findOrFail($id);
         });
 
-        $counter = new Counter();
+        $counter = resolve(Counter::class);
 
         return view(
             'posts.show',
