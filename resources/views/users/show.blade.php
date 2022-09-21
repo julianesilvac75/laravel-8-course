@@ -10,6 +10,10 @@
         <div class="col-8">
             <h3>{{ $user->name }}</h3>
 
+            <p>
+                {{ trans_choice('messages.people.reading', $counter) }}
+            </p>
+
             <x-commentForm :route="route('users.comments.store', ['user' => $user->id])"></x-commentForm>
 
             <x-commentList :comments="$user->commentsOn"></x-commentList>
