@@ -8,7 +8,7 @@
             </div>
     
             <div>
-                <input class="btn btn-primary btn-block" type="submit" value="Add Comment">
+                <input class="btn btn-primary btn-block" type="submit" value="{{ __('Add comment') }}">
             </div>
         </form>
 
@@ -16,7 +16,7 @@
     
     @else
         <p>
-            <a href="{{ route('login') }}">Sign-in</a> to post a comment!
+            <a href="{{ route('login') }}">{{ __('Sign-in') }}</a> {{ __('to post comments!') }}
         </p>
     @endauth
         <hr>

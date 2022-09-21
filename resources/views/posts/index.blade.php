@@ -9,7 +9,7 @@
             @forelse ($posts as $key => $post)
                 @include('posts.partials.post')
             @empty
-                <div>No blog posts yet!</div>
+                <div>{{ __('No blog posts yet!') }}</div>
             @endforelse
         </div>
 

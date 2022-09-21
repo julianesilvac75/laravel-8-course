@@ -15,7 +15,7 @@
                 {{ $post->title }}
                 
                 <x-badge show="{{ now()->diffInMinutes($post->created_at) < 5 }}">
-                    Brand new!
+                    {{ __('Brand new Post!') }}
                 </x-badge>
 
             @if ($post->image)
@@ -30,14 +30,14 @@
 
             <x-updated :date="$post->created_at" :name="$post->user->name" :userId="$post->user->id" />
             <x-updated :date="$post->updated_at">
-                Updated
+                {{ __('Updated') }}
             </x-updated>
 
             <x-tags :tags="$post->tags" />
 
-            <p>Currently read by {{ $counter }} people</p>
+            <p>{{ trans_choice('messages.people.reading', $counter) }}</p>
 
-            <h4>Comments</h4>
+            <h4>{{ __('Comments') }}</h4>
 
             <x-commentForm :route="route('posts.comments.store', ['post' => $post->id])"></x-commentForm>
 
