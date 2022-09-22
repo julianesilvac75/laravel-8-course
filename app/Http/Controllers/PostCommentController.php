@@ -15,9 +15,6 @@ class PostCommentController extends Controller
 
     public function index(BlogPost $post)
     {
-        // dump(is_array($post->comments));
-        // dump(get_class($post->comments));
-        // die;
         return $post->comments;
     }
 
