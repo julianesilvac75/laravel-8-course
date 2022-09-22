@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\CounterContract;
 use App\Events\BlogPostPosted;
 use App\Http\Requests\StorePost;
 use App\Models\BlogPost;
@@ -12,9 +13,12 @@ use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
-    public function __construct()
+    private $counter;
+
+    public function __construct(CounterContract $counter)
     {
         $this->middleware('auth')->only(['create', 'store', 'edit', 'update', 'destroy']);
+        $this->counter = $counter;
     }
 
     /**
@@ -80,13 +84,13 @@ class PostsController extends Controller
             return BlogPost::with('comments', 'tags', 'user', 'comments.user')->findOrFail($id);
         });
 
-        $counter = resolve(Counter::class);
+        // $counter = resolve(Counter::class);
 
         return view(
             'posts.show',
             [
                 'post' => $post,
-                'counter' => $counter->increment("blog-post-{$id}", ['blog-post']),
+                'counter' => $this->counter->increment("blog-post-{$id}", ['blog-post']),
             ]);
     }
 
