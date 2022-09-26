@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Events\BlogPostPosted;
+use App\Facades\CounterFacade;
 use App\Http\Requests\StorePost;
 use App\Models\BlogPost;
 use App\Models\Image;
-use App\Services\Counter;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
@@ -80,13 +80,11 @@ class PostsController extends Controller
             return BlogPost::with('comments', 'tags', 'user', 'comments.user')->findOrFail($id);
         });
 
-        $counter = resolve(Counter::class);
-
         return view(
             'posts.show',
             [
                 'post' => $post,
-                'counter' => $counter->increment("blog-post-{$id}", ['blog-post']),
+                'counter' => CounterFacade::increment("blog-post-{$id}", ['blog-post']),
             ]);
     }
 
