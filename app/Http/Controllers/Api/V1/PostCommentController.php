@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
- 
+use App\Http\Resources\Comment as CommentResource;
+use App\Models\BlogPost;
+
 class PostCommentController extends Controller
 {
     /**
@@ -12,9 +14,11 @@ class PostCommentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(BlogPost $post)
     {
-        return response()->json(['comments' => []]);
+        return CommentResource::collection(
+            $post->comments()->with('user')->get()
+        );
     }
 
     /**

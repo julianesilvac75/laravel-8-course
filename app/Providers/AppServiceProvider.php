@@ -8,10 +8,11 @@ use App\Models\Comment;
 use App\Observers\BlogPostObserver;
 use App\Observers\CommentObserver;
 use App\Services\Counter;
-use App\Services\DummyCounter;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use App\Http\Resources\Comment as CommentResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -56,8 +57,9 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(
             'App\Contracts\CounterContract',
-            // DummyCounter::class,
             Counter::class
         );
+
+        JsonResource::withoutWrapping();
     }
 }
