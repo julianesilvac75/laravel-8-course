@@ -60,6 +60,7 @@ class AppServiceProvider extends ServiceProvider
             Counter::class
         );
 
+        // CommentResource::withoutWrapping();
         JsonResource::withoutWrapping();
     }
 }
