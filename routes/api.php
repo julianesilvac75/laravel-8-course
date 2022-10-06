@@ -36,3 +36,10 @@ Route::prefix('v2')
             return response()->json(['status' => true]);
         });
     });
+
+Route::fallback(function () {
+    return response()->json(
+        ['message' => 'Not Found'],
+        404
+    );
+})->name('api.fallback');
