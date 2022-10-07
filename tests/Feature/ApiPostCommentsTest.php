@@ -14,9 +14,7 @@ class ApiPostCommentsTest extends TestCase
 
     public function test_new_blog_post_does_not_have_comments()
     {
-        BlogPost::factory()->create([
-            'user_id' => $this->user()->id,
-        ]);
+        $this->blogPost();
 
         $response = $this->json('GET', 'api/v1/posts/1/comments');
 
@@ -27,9 +25,7 @@ class ApiPostCommentsTest extends TestCase
 
     public function test_blog_post_has_10_comments()
     {
-        BlogPost::factory()->create([
-            'user_id' => $this->user()->id,
-        ])->each(function (BlogPost $post) {
+        $this->blogPost()->each(function (BlogPost $post) {
             $post->comments()->saveMany(
                 Comment::factory(10)->make([
                     'user_id' => $this->user()->id
@@ -57,5 +53,46 @@ class ApiPostCommentsTest extends TestCase
                 'links',
                 'meta'])
             ->assertJsonCount(10, 'data');
+    }
+
+    public function test_adding_comments_when_not_authenticated()
+    {
+        $this->blogPost();
+
+        $response = $this->json('POST', 'api/v1/posts/3/comments', [
+            'content' => 'Hello from test'
+        ]);
+
+        $response->assertUnauthorized();
+    }
+
+    public function test_adding_comments_when_authenticated()
+    {
+        $this->blogPost();
+
+        $response = $this->actingAs($this->user(), 'api')
+            ->json('POST', 'api/v1/posts/4/comments', [
+            'content' => 'Hello from test'
+        ]);
+
+        $response->assertStatus(201);
+    }
+
+    public function test_adding_comment_with_invalid_data()
+    {
+        $this->blogPost();
+
+        $response = $this->actingAs($this->user(), 'api')
+            ->json('POST', 'api/v1/posts/5/comments', []);
+
+        $response->assertStatus(422)
+            ->assertJson([
+                'message' => 'The given data was invalid.',
+                'errors' => [
+                    'content' => [
+                        'The content field is required.'
+                    ]
+                ]
+            ]);
     }
 }
