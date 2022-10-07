@@ -19,16 +19,27 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('v1')->name('api.v1.')->group(function () {
-    Route::get('/status', function () {
-        return response()->json(['status' => ' OK']);
-    })->name('status');
+Route::prefix('v1')
+    ->name('api.v1.')
+    ->group(function () {
+        Route::get('/status', function () {
+            return response()->json(['status' => 'OK']);
+        })->name('status');
 
-    Route::apiResource('posts.comments', PostCommentController::class);
-});
-
-Route::prefix('v2')->name('api.v2.')->group(function () {
-    Route::get('/status', function () {
-        return response()->json(['status' => true]);
+        Route::apiResource('posts.comments', PostCommentController::class);
     });
-});
+
+Route::prefix('v2')
+    ->name('api.v2.')
+    ->group(function () {
+        Route::get('/status', function () {
+            return response()->json(['status' => true]);
+        });
+    });
+
+Route::fallback(function () {
+    return response()->json(
+        ['message' => 'Not Found'],
+        404
+    );
+})->name('api.fallback');
